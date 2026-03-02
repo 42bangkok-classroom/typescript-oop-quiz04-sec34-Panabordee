@@ -57,11 +57,7 @@ export class MissionService {
 
     missions.splice(missionIndex, 1);
 
-    fs.writeFileSync(
-      filePath,
-      JSON.stringify(missions, null, 2),
-      'utf-8',
-    );
+    fs.writeFileSync(filePath, JSON.stringify(missions, null, 2), 'utf-8');
 
     return {
       message: `Mission ID ${id} has been successfully deleted.`,
