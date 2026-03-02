@@ -8,20 +8,23 @@ export class MissionService {
     { id: 3, codename: 'RED_DAWN', status: 'FAILED' },
     { id: 4, codename: 'BLACKOUT', status: 'ACTIVE' },
     { id: 5, codename: 'ECHO_FALLS', status: 'COMPLETED' },
-    { id: 6, codename: 'GHOST_RIDER', status: 'COMPLETED' }
+    { id: 6, codename: 'GHOST_RIDER', status: 'COMPLETED' },
   ];
 
   getSummary(): Record<string, number> {
-    return this.missions.reduce((acc, mission) => {
-      const status = mission.status;
+    return this.missions.reduce(
+      (acc, mission) => {
+        const status = mission.status;
 
-      if (!acc[status]) {
-        acc[status] = 0;
-      }
+        if (!acc[status]) {
+          acc[status] = 0;
+        }
 
-      acc[status]++;
+        acc[status] += 1;
 
-      return acc;
-    }, {} as Record<string, number>);
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }
 }
