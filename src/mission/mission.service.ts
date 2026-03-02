@@ -20,41 +20,23 @@ export class MissionService {
       return acc;
     }, {});
   }
-  findAll(): Array<{
-    id: string;
-    codename: string;
-    status: string;
-    startDate: string;
-    endDate: string | null;
-    durationDays: number;
-  }> {
+  findAll(): Array<IMission & { durationDays: number }> {
     const filePath = path.join(process.cwd(), 'data', 'missions.json');
     const rawData: string = fs.readFileSync(filePath, 'utf-8');
 
-    const parsed: unknown = JSON.parse(rawData);
+    const missions: IMission[] = JSON.parse(rawData) as IMission[];
 
-    if (!Array.isArray(parsed)) {
-      throw new Error('Invalid missions data format');
-    }
-
-    const missions: IMission[] = parsed as IMission[];
-
-    return missions.map((mission: IMission) => {
-      const durationDays: number =
-        mission.endDate !== null
-          ? Math.floor(
-              (new Date(mission.endDate).getTime() -
-                new Date(mission.startDate).getTime()) /
-                (1000 * 60 * 60 * 24),
-            )
-          : -1;
+    return missions.map((mission) => {
+      const durationDays: number = mission.endDate
+        ? Math.floor(
+            (new Date(mission.endDate).getTime() -
+              new Date(mission.startDate).getTime()) /
+              (1000 * 60 * 60 * 24),
+          )
+        : -1;
 
       return {
-        id: mission.id,
-        codename: mission.codename,
-        status: mission.status,
-        startDate: mission.startDate,
-        endDate: mission.endDate,
+        ...mission,
         durationDays,
       };
     });
